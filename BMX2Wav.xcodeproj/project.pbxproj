@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F791B98624FB06310065BF49 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F791B98524FB06310065BF49 /* main.cpp */; };
+		F7AD20E32502C84F0040B563 /* ValueFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7AD20E12502C84F0040B563 /* ValueFinder.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		F791B98224FB06310065BF49 /* BMX2Wav */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BMX2Wav; sourceTree = BUILT_PRODUCTS_DIR; };
 		F791B98524FB06310065BF49 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		F7AD20E12502C84F0040B563 /* ValueFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ValueFinder.cpp; sourceTree = "<group>"; };
+		F7AD20E22502C84F0040B563 /* ValueFinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ValueFinder.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,9 +60,19 @@
 		F791B98424FB06310065BF49 /* BMX2Wav */ = {
 			isa = PBXGroup;
 			children = (
+				F7AD20E02502C8000040B563 /* Classes */,
 				F791B98524FB06310065BF49 /* main.cpp */,
 			);
 			path = BMX2Wav;
+			sourceTree = "<group>";
+		};
+		F7AD20E02502C8000040B563 /* Classes */ = {
+			isa = PBXGroup;
+			children = (
+				F7AD20E12502C84F0040B563 /* ValueFinder.cpp */,
+				F7AD20E22502C84F0040B563 /* ValueFinder.hpp */,
+			);
+			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -120,6 +133,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F791B98624FB06310065BF49 /* main.cpp in Sources */,
+				F7AD20E32502C84F0040B563 /* ValueFinder.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
