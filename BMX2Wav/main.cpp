@@ -16,32 +16,17 @@ using namespace std;
 
 static void extractWave(std::ifstream &bmxFile) {
     
-    int32_t buffer;
-    bmxFile.read((char*)&buffer, 3);
-    
     cout << "Writing Sample Data\n";
     
+    // data vars
     ofstream outputfile;
-    uint32_t waveSizeBytes;
-    char* waveStreamBuffer = new char[1];
-    int32_t waveDataSize;
-    
-    bmxFile.read((char*)&waveSizeBytes, sizeof(waveSizeBytes));
     outputfile.open("test.wav");
     
-    for (typeof waveSizeBytes i = 0; i < waveSizeBytes; ++i ){
-        bmxFile.read(waveStreamBuffer, sizeof(waveStreamBuffer));
-        outputfile.write(waveStreamBuffer, sizeof(waveStreamBuffer));
-    }
+    uint32_t waveSizeBytes;
+    char waveStreamBuffer;
     
-    long long waveDataSizeLong = outputfile.tellp();
-    waveDataSize = (int32_t)waveDataSizeLong;
-    
-    // appending header
-    cout << "APPENDING LOWER HEADER\n";
-    
-    outputfile.seekp(0);
-    
+    // header vars
+    int32_t waveDataSizeA = 0;
     int32_t some16 = 16;
     int16_t pcm = 1;
     int16_t channels = 1;
@@ -49,9 +34,9 @@ static void extractWave(std::ifstream &bmxFile) {
     int32_t sampleRateBitCh = 0;
     int16_t BitCh = 0;
     int16_t Bits = 16;
+    int32_t waveDataSize = 0;
     
-    int32_t waveDataSizeA = waveDataSize + 36;
-    
+    // writing header
     outputfile << "RIFF";
     outputfile.write(reinterpret_cast<const char *>(&waveDataSizeA), sizeof(waveDataSizeA));
     outputfile << "WAVE";
@@ -65,7 +50,28 @@ static void extractWave(std::ifstream &bmxFile) {
     outputfile.write(reinterpret_cast<const char *>(&Bits), sizeof(Bits));
     outputfile << "data";
     outputfile.write(reinterpret_cast<const char *>(&waveDataSize), sizeof(waveDataSize));
-
+    
+    // writing data
+    int32_t buffer;
+    bmxFile.read((char*)&buffer, 3);
+    bmxFile.read((char*)&waveSizeBytes, sizeof(waveSizeBytes));
+    
+    
+    for (typeof waveSizeBytes i = 0; i < waveSizeBytes; ++i ){
+        bmxFile.read(&waveStreamBuffer, sizeof(waveStreamBuffer));
+        outputfile << waveStreamBuffer;
+    }
+    
+    // writing data size to headers
+    long long waveDataSizeLong = outputfile.tellp();
+    outputfile.seekp(4);
+    waveDataSizeA = (int32_t)waveDataSizeLong - 8;
+    outputfile.write(reinterpret_cast<const char *>(&waveDataSizeA), sizeof(waveDataSizeA));
+    outputfile.seekp(40);
+    waveDataSize = (int32_t)waveDataSizeLong - 44;
+    outputfile.write(reinterpret_cast<const char *>(&waveDataSize), sizeof(waveDataSize));
+    
+    
     cout << "Sample Sizes: " << waveDataSizeA << " and " << waveDataSize << "\n";
       
     outputfile.close();
@@ -90,7 +96,8 @@ int main(int argc, const char * argv[]) {
     bufferPtr = &buffer;
     
     // bmxFile.open("./Bmx/2Samples.bmx", ios::binary);
-    bmxFile.open("./Bmx/2Samples1Tracker.bmx", ios::binary);
+    // bmxFile.open("./Bmx/2Samples1Tracker.bmx", ios::binary);
+    bmxFile.open("./Bmx/bdr7.bmx", ios::binary);
     // bmxFile.open("./Bmx/Empty.bmx", ios::binary);
     // bmxFile.open("./Bmx/A story from the sea total1.bmx", ios::binary);
 
