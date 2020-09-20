@@ -10,70 +10,42 @@
 #include <fstream>
 #include <array>
 #include <string>
+#include <regex>
 #include <stdint.h>
+
+#include "WaveFile.hpp"
 
 using namespace std;
 
 static void extractWave(std::ifstream &bmxFile) {
     
+    // std::string str = "/api/asd/";
+    // std::string pattern = "/api/(.*)/";
+    // std::cout << "Starting matching" << std::endl;
+    // std::smatch matches;
+    // if (std::regex_match(str, matches, std::regex(pattern, std::regex::egrep)))
+    // {
+    //     std::cout << "Found match!" << std::endl;
+    //     std::cout << "All matches: ";
+    //     for (auto& it : matches)
+    //         std::cout << it << ", ";
+    //     std::cout << std::endl;
+    // }
+    
     cout << "Writing Sample Data\n";
+
+    regex r;
     
     // data vars
     ofstream outputfile;
-    outputfile.open("test.wav");
+    __fs::filesystem::create_directories("./samples1/asd/ds");
+    outputfile.open("./samples1/test2.wav");
+
+    WaveFile waveFile;
+    waveFile.writeHeader(outputfile);
+    waveFile.writeData(outputfile, bmxFile);
+    waveFile.writeSizesToHeader(outputfile);
     
-    uint32_t waveSizeBytes;
-    char waveStreamBuffer;
-    
-    // header vars
-    int32_t waveDataSizeA = 0;
-    int32_t some16 = 16;
-    int16_t pcm = 1;
-    int16_t channels = 1;
-    int32_t sampleRate = 44100;
-    int32_t sampleRateBitCh = 0;
-    int16_t BitCh = 0;
-    int16_t Bits = 16;
-    int32_t waveDataSize = 0;
-    
-    // writing header
-    outputfile << "RIFF";
-    outputfile.write(reinterpret_cast<const char *>(&waveDataSizeA), sizeof(waveDataSizeA));
-    outputfile << "WAVE";
-    outputfile << "fmt ";
-    outputfile.write(reinterpret_cast<const char *>(&some16), sizeof(some16));
-    outputfile.write(reinterpret_cast<const char *>(&pcm), sizeof(pcm));
-    outputfile.write(reinterpret_cast<const char *>(&channels), sizeof(channels));
-    outputfile.write(reinterpret_cast<const char *>(&sampleRate), sizeof(sampleRate));
-    outputfile.write(reinterpret_cast<const char *>(&sampleRateBitCh), sizeof(sampleRateBitCh));
-    outputfile.write(reinterpret_cast<const char *>(&BitCh), sizeof(BitCh));
-    outputfile.write(reinterpret_cast<const char *>(&Bits), sizeof(Bits));
-    outputfile << "data";
-    outputfile.write(reinterpret_cast<const char *>(&waveDataSize), sizeof(waveDataSize));
-    
-    // writing data
-    int32_t buffer;
-    bmxFile.read((char*)&buffer, 3);
-    bmxFile.read((char*)&waveSizeBytes, sizeof(waveSizeBytes));
-    
-    
-    for (typeof waveSizeBytes i = 0; i < waveSizeBytes; ++i ){
-        bmxFile.read(&waveStreamBuffer, sizeof(waveStreamBuffer));
-        outputfile << waveStreamBuffer;
-    }
-    
-    // writing data size to headers
-    long long waveDataSizeLong = outputfile.tellp();
-    outputfile.seekp(4);
-    waveDataSizeA = (int32_t)waveDataSizeLong - 8;
-    outputfile.write(reinterpret_cast<const char *>(&waveDataSizeA), sizeof(waveDataSizeA));
-    outputfile.seekp(40);
-    waveDataSize = (int32_t)waveDataSizeLong - 44;
-    outputfile.write(reinterpret_cast<const char *>(&waveDataSize), sizeof(waveDataSize));
-    
-    
-    cout << "Sample Sizes: " << waveDataSizeA << " and " << waveDataSize << "\n";
-      
     outputfile.close();
 }
 
@@ -86,14 +58,16 @@ int main(int argc, const char * argv[]) {
 
     ifstream bmxFile;
     string buzzStr;
+    
     array<char, 4> wavtSecName  {'W','A','V','T'};
     array<char, 4> waveSecName1 {'W','A','V','E'};
     array<char, 4> waveSecName2 {'C','W','A','V'};
-    array<char, 4> waveSecGauge {'-','-','-','-'};
+    
     
     char buffer;
     char* bufferPtr;
     bufferPtr = &buffer;
+    
     
     // bmxFile.open("./Bmx/2Samples.bmx", ios::binary);
     // bmxFile.open("./Bmx/2Samples1Tracker.bmx", ios::binary);
@@ -112,21 +86,7 @@ int main(int argc, const char * argv[]) {
     
     // get wave and size of wave section
     
-    int maxItr = 180000000;
-    int counter = 0;
-    while (counter < maxItr) {
 
-        bmxFile.read(bufferPtr, 1);
-        waveSecGauge[0] = waveSecGauge[1];
-        waveSecGauge[1] = waveSecGauge[2];
-        waveSecGauge[2] = waveSecGauge[3];
-        waveSecGauge[3] = buffer;
-        counter++;
-        
-        if (waveSecGauge == waveSecName1 || waveSecGauge == waveSecName2) {
-            break;
-        }
-    }
     
     bmxFile.read((char*)&waveSectionOffset, sizeof(waveSectionOffset));
     bmxFile.read((char*)&waveSectionSize, sizeof(waveSectionSize));

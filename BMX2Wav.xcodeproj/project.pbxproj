@@ -7,8 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F704ABFC2512A8AB00F858D8 /* WaveFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F704ABFA2512A8AB00F858D8 /* WaveFile.cpp */; };
 		F791B98624FB06310065BF49 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F791B98524FB06310065BF49 /* main.cpp */; };
-		F7AD20E32502C84F0040B563 /* ValueFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7AD20E12502C84F0040B563 /* ValueFinder.cpp */; };
+		F7BE3F2A2517CFCC0030498B /* WaveTObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7BE3F282517CFCC0030498B /* WaveTObject.cpp */; };
+		F7BE3F2D2517E13C0030498B /* WaveObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7BE3F2B2517E13C0030498B /* WaveObject.cpp */; };
+		F7BE3F302517E3B30030498B /* SectionUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7BE3F2E2517E3B30030498B /* SectionUtility.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,10 +27,16 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F704ABFA2512A8AB00F858D8 /* WaveFile.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WaveFile.cpp; sourceTree = "<group>"; };
+		F704ABFB2512A8AB00F858D8 /* WaveFile.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WaveFile.hpp; sourceTree = "<group>"; };
 		F791B98224FB06310065BF49 /* BMX2Wav */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = BMX2Wav; sourceTree = BUILT_PRODUCTS_DIR; };
 		F791B98524FB06310065BF49 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		F7AD20E12502C84F0040B563 /* ValueFinder.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ValueFinder.cpp; sourceTree = "<group>"; };
-		F7AD20E22502C84F0040B563 /* ValueFinder.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ValueFinder.hpp; sourceTree = "<group>"; };
+		F7BE3F282517CFCC0030498B /* WaveTObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WaveTObject.cpp; sourceTree = "<group>"; };
+		F7BE3F292517CFCC0030498B /* WaveTObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WaveTObject.hpp; sourceTree = "<group>"; };
+		F7BE3F2B2517E13C0030498B /* WaveObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WaveObject.cpp; sourceTree = "<group>"; };
+		F7BE3F2C2517E13C0030498B /* WaveObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WaveObject.hpp; sourceTree = "<group>"; };
+		F7BE3F2E2517E3B30030498B /* SectionUtility.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SectionUtility.cpp; sourceTree = "<group>"; };
+		F7BE3F2F2517E3B30030498B /* SectionUtility.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SectionUtility.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,19 +69,17 @@
 		F791B98424FB06310065BF49 /* BMX2Wav */ = {
 			isa = PBXGroup;
 			children = (
-				F7AD20E02502C8000040B563 /* Classes */,
 				F791B98524FB06310065BF49 /* main.cpp */,
+				F704ABFA2512A8AB00F858D8 /* WaveFile.cpp */,
+				F704ABFB2512A8AB00F858D8 /* WaveFile.hpp */,
+				F7BE3F282517CFCC0030498B /* WaveTObject.cpp */,
+				F7BE3F292517CFCC0030498B /* WaveTObject.hpp */,
+				F7BE3F2B2517E13C0030498B /* WaveObject.cpp */,
+				F7BE3F2C2517E13C0030498B /* WaveObject.hpp */,
+				F7BE3F2E2517E3B30030498B /* SectionUtility.cpp */,
+				F7BE3F2F2517E3B30030498B /* SectionUtility.hpp */,
 			);
 			path = BMX2Wav;
-			sourceTree = "<group>";
-		};
-		F7AD20E02502C8000040B563 /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				F7AD20E12502C84F0040B563 /* ValueFinder.cpp */,
-				F7AD20E22502C84F0040B563 /* ValueFinder.hpp */,
-			);
-			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -132,8 +139,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F7BE3F2D2517E13C0030498B /* WaveObject.cpp in Sources */,
+				F7BE3F2A2517CFCC0030498B /* WaveTObject.cpp in Sources */,
+				F704ABFC2512A8AB00F858D8 /* WaveFile.cpp in Sources */,
 				F791B98624FB06310065BF49 /* main.cpp in Sources */,
-				F7AD20E32502C84F0040B563 /* ValueFinder.cpp in Sources */,
+				F7BE3F302517E3B30030498B /* SectionUtility.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
