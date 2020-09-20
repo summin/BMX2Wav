@@ -37,6 +37,15 @@ array<uint32_t, 2> SectionUtility::seekSectionOffsetAndSize(array<char, 4> secti
         if (fantomGauge == sectionGauge) {
             break;
         }
+        if (inputstream.eof()) {
+            this->sectionFound = false;
+            return sectionOffsetAndSize;
+        }
     }
+    
+    inputstream.read((char*)&sectionOffsetAndSize[0], sizeof(sectionOffsetAndSize[0]));
+    inputstream.read((char*)&sectionOffsetAndSize[1], sizeof(sectionOffsetAndSize[1]));
+    this->sectionFound = true;
+    
     return sectionOffsetAndSize;
 }

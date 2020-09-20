@@ -12,6 +12,7 @@
 #include <string>
 #include <regex>
 #include <stdint.h>
+#include <SectionUtility.hpp>
 
 #include "WaveFile.hpp"
 
@@ -52,8 +53,7 @@ static void extractWave(std::ifstream &bmxFile) {
 int main(int argc, const char * argv[]) {
     
     uint32_t numberOfSections;
-    uint32_t waveSectionOffset;
-    uint32_t waveSectionSize;
+
     uint16_t numberOfWaves;
 
     ifstream bmxFile;
@@ -87,9 +87,10 @@ int main(int argc, const char * argv[]) {
     // get wave and size of wave section
     
 
-    
-    bmxFile.read((char*)&waveSectionOffset, sizeof(waveSectionOffset));
-    bmxFile.read((char*)&waveSectionSize, sizeof(waveSectionSize));
+    array<uint32_t, 2> waveSectionOffsetAndSize;
+    array<uint32_t, 2> wavTSectionOffsetAndSize;
+    SectionUtility sectionUtility;
+    sectionUtility.seekSectionOffsetAndSize(<#std::array<char, 4> sectionGauge#>, <#std::ifstream &inputstream#>)
     
     // get number of Waves
 

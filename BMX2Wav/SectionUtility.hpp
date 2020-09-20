@@ -15,6 +15,7 @@
 
 class SectionUtility {
 public:
+    bool sectionFound;
     std::array<uint32_t, 2> seekSectionOffsetAndSize(std::array<char, 4> sectionGauge, std::ifstream &inputstream);
 };
 
