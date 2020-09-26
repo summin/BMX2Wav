@@ -11,12 +11,14 @@
 
 #include <stdio.h>
 #include <iostream>
+#include <string>
 #include <array>
 
 class SectionUtility {
 public:
-    bool sectionFound;
+    bool isSectionFound;
     std::array<uint32_t, 2> seekSectionOffsetAndSize(std::array<char, 4> sectionGauge, std::ifstream &inputstream);
+    std::string seekSectionStringValue(std::array<char, 4> sectionGauge, std::ifstream &inputstream);
 };
 
 #endif /* Section_hpp */

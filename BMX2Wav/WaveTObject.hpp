@@ -19,19 +19,19 @@ public:
     std::string fileName;
     std::string name;
     float volume;
-    char flags;
+    u_int8_t flags;
     bool stereo;
     bool envelopes;
     
-    void setIndex(std::ifstream &inputstream);
-    void setFileName(std::ifstream &inputstream);
-    void setName(std::ifstream &inputstream);
-    void setVolume(std::ifstream &inputstream);
-    void setFlags(std::ifstream &inputstream);
-    void setStereo(char flags);
-    void setEnvelopes(char flags);
+    void setFields(std::ifstream &inputstream);
+    void setFieldsDynamic(std::ifstream &inputstream, int index);
+
+    void extractStereo();
+    void extractEnvelopes();
     void skipEnvelopes(std::ifstream &inputstream);
     void skipRemaining(std::ifstream &inputstream);
+    void seekNext(std::ifstream &inputstream);
+    void printFieldsValues();
 };
 
 #endif /* WaveT_hpp */
