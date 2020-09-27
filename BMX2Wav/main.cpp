@@ -15,24 +15,38 @@
 #include "SectionUtility.hpp"
 #include "WaveFile.hpp"
 #include "WaveTObject.hpp"
-#include "WaveObject.hpp"
 
+namespace fs = std::__fs::filesystem;
 using namespace std;
 
 /**
  writes data to waveFile
  */
-static void extractWave(std::ifstream &bmxFile) {
-    
-    ofstream outputfile;
-    outputfile.open("./samples1/test2.wav");
-
-    WaveFile waveFile;
-    waveFile.writeHeader(outputfile);
-    waveFile.writeData(outputfile, bmxFile);
-    waveFile.writeSizesToHeader(outputfile);
-    
-    outputfile.close();
+static void extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t numberOfTs) {
+    cout << "\nentered the wav extraction " << numberOfTs <<  "\n";
+    for (int m = 0; m < numberOfTs; ++m) {
+        ofstream outputfile;
+        // outputfile.open("./1.wav");
+        // // ofstream outputfile1;
+        WaveFile waveFile;
+        waveFile.setWaveIndex(bmxFile);
+        waveFile.setWaveFormat(bmxFile);
+        
+        cout << "\n_" << waveFile.waveIndex << "_ index \n";
+        cout << "\n_" << waveFile.waveFormat << "_ format \n";
+        
+        for (uint16_t n = 0; n < numberOfTs; ++n) {
+            if (wavTs[n].index == waveFile.waveIndex) {
+                __fs::filesystem::create_directories(wavTs[n].folderName);
+                outputfile.open(wavTs[n].fileName);
+            }
+        }
+        
+        waveFile.writeHeader(outputfile);
+        waveFile.writeData(outputfile, bmxFile);
+        waveFile.writeSizesToHeader(outputfile);
+        outputfile.close();
+    }
 }
 
 /**
@@ -82,6 +96,26 @@ static int processFile(const std::string &bmxFileName) {
     cout << "WavTSecOffet: " << wavTSectionOffsetAndSize[0] << "\n";
     cout << "WavTSecSize: " << wavTSectionOffsetAndSize[1] << "\n";
     
+    /**
+     Get number of WavTs
+     */
+    bmxFile.clear();
+    bmxFile.seekg(0);
+    bmxFile.seekg(wavTSectionOffsetAndSize[0], ios::beg);
+    bmxFile.read((char*)&numberOfWavTs, sizeof(numberOfWavTs));
+    cout << "Number of WavTs in BMX: " << numberOfWavTs << "\n";
+    
+    WaveTObject waveTList[numberOfWavTs];
+    
+    for(int i = 0; i < numberOfWavTs; ++i){
+        WaveTObject waveTObject;
+        waveTObject.setFieldsDynamic(bmxFile, i);
+        waveTObject.extractFolderName();
+        waveTObject.extractStereo();
+        waveTObject.extractEnvelopes();
+        waveTObject.printFieldsValues();
+        waveTList[i] = waveTObject;
+    }
     
     /**
      Get number of Waves
@@ -92,50 +126,17 @@ static int processFile(const std::string &bmxFileName) {
     bmxFile.read((char*)&numberOfWaves, sizeof(numberOfWaves));
     cout << "Number of Waves in BMX: " << numberOfWaves << "\n";
     
-    /**
-     Get number of WavTs
-     */
-    bmxFile.clear();
-    bmxFile.seekg(0);
-    bmxFile.seekg(wavTSectionOffsetAndSize[0], ios::beg);
-    bmxFile.read((char*)&numberOfWavTs, sizeof(numberOfWavTs));
-    cout << "Number of WavTs in BMX: " << numberOfWavTs << "\n";
-    
     if (numberOfWaves != numberOfWavTs) {
         cout << "Unsupported file";
         return 1;
     }
     
-    WaveObject waveList[numberOfWaves];
-    WaveTObject waveTList[numberOfWavTs];
-    
-    for(int i = 0; i < numberOfWavTs; ++i){
-        WaveTObject waveTObject;
-        waveTObject.setFieldsDynamic(bmxFile, i);
-        waveTObject.extractStereo();
-        // waveTObject.extractEnvelopes();
-        // if (waveTObject.envelopes == 1) {
-        //     waveTObject.skipEnvelopes(bmxFile);
-        // }
-        // waveTObject.skipRemaining(bmxFile);
-        waveTObject.printFieldsValues();
-        waveTList[i] = waveTObject;
-    }
-    
-    // for(int i = 0; i < numberOfWaves; ++i){
-    //     WaveObject waveObject;
-    //     waveList[i] = waveObject;
-    // }
-    
     /**
-     read wave
+     Process Waves
      */
-    cout << "READING WAVE \n\n";
-    
-    // extractWave(bmxFile);
-    
+    extractWaves(bmxFile, waveTList, numberOfWavTs);
+
     bmxFile.close();
-    
     cout << "EXTRACTION COMPLETED \n\n";
     
     return 0;
@@ -145,21 +146,24 @@ static int processFile(const std::string &bmxFileName) {
  main
  */
 int main(int argc, const char * argv[]) {
-    
-    // string bmxFileName = "./Bmx/2Samples.bmx";
-    // string bmxFileName = "./Bmx/2Samples1Tracker.bmx";
-    // string bmxFileName = "./Bmx/bdr7.bmx";
-    // string bmxFileName = "./Bmx/Empty.bmx";
-    
-    string bmxFileName = "./Bmx/A story from the sea total1.bmx";
-    
-    processFile(bmxFileName);
+    /**
+     iterate through files in directory
+     */
+    std::string path = "./";
+    for (const auto & entry : fs::directory_iterator(path)) {
+        string bmxFileName = entry.path();
+        if (bmxFileName.substr(bmxFileName.length()-4, 4) == ".bmx") {
+            cout << "\n\n\nProcessing file: " << bmxFileName << endl;
+            processFile(bmxFileName);
+        }
+    }
 }
 
 /**
  code holder. inactive
  */
-void someStuff() {
+void someStuffUnused() {
+    
     // std::string str = "/api/asd/";
     // std::string pattern = "/api/(.*)/";
     // std::cout << "Starting matching" << std::endl;

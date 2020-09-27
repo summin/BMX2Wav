@@ -11,6 +11,7 @@
 #include "WaveFile.hpp"
 
 void WaveFile::writeHeader(std::ofstream &outputfile) {
+    std::cout << "\nwritingHEADER\n";
     outputfile << "RIFF";
     outputfile.write(reinterpret_cast<const char *>(&this->header_waveDataSizeA), sizeof(header_waveDataSizeA));
     outputfile << "WAVE";
@@ -36,12 +37,18 @@ void WaveFile::writeSizesToHeader(std::ofstream &outputfile) {
     outputfile.write(reinterpret_cast<const char *>(&this->header_waveDataSize), sizeof(this->header_waveDataSize));
 }
 
-void WaveFile::writeData(std::ofstream &outputfile, std::ifstream &inputstream) {
-    
+void WaveFile::setWaveIndex(std::ifstream &inputstream) {
     inputstream.read((char*)&this->waveIndex, 2);
+}
+void WaveFile::setWaveFormat(std::ifstream &inputstream) {
     inputstream.read((char*)&this->waveFormat, 1);
+}
+
+void WaveFile::writeData(std::ofstream &outputfile, std::ifstream &inputstream) {
+    std::cout << "\nwritingDATA\n";
+    u_int32_t waveSizeBytes;
     inputstream.read((char*)&waveSizeBytes, sizeof(waveSizeBytes));
-    
+    std::cout << "\nwaveSize: " << waveSizeBytes << "\n";
     for (typeof waveSizeBytes i = 0; i < waveSizeBytes; ++i ){
         inputstream.read(&waveStreamBuffer, sizeof(waveStreamBuffer));
         outputfile << waveStreamBuffer;

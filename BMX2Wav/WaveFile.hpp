@@ -17,11 +17,13 @@ public:
     
     uint32_t waveSizeBytes;
     uint16_t waveIndex;
+    char waveFormat;
+    
     char waveStreamBuffer;
     std::string name;
     std::string path;
     
-    int8_t waveFormat;
+    
     
     int32_t header_waveDataSizeA = 0;
     int32_t header_some16 = 16;
@@ -33,6 +35,8 @@ public:
     int16_t header_Bits = 16;
     int32_t header_waveDataSize = 0;
     
+    void setWaveIndex(std::ifstream &inputstream);
+    void setWaveFormat(std::ifstream &inputstream);
     void writeData(std::ofstream &outputfile, std::ifstream &inputstream);
     void writeHeader(std::ofstream &outputfile);
     void writeSizesToHeader(std::ofstream &outputfile);
