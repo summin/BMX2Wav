@@ -71,6 +71,9 @@ void WaveTObject::extractStereo() {
 
 void WaveTObject::extractEnvelopes() {
     this->envelopes = (bool)((this->flags >> 7) & 1);
+    this->floatingPointMem = (bool)((this->flags >> 2) & 1);
+    this->loop = (bool)((this->flags >> 0) & 1);
+    this->dontSave = (bool)((this->flags >> 1) & 1);
 }
 
 void WaveTObject::printFieldsValues(){
@@ -80,4 +83,7 @@ void WaveTObject::printFieldsValues(){
     cout << "volume: " << this->volume << "\n";
     cout << "stereo: " << this->stereo << "\n";
     cout << "envelopes: " << this->envelopes << "\n";
+    cout << "floatingPointMem: " << this->floatingPointMem << "\n";
+    cout << "loop: " << this->loop << "\n";
+    cout << "dontSave: " << this->dontSave << "\n";
 }

@@ -44,13 +44,15 @@ void WaveFile::setWaveFormat(std::ifstream &inputstream) {
     inputstream.read((char*)&this->waveFormat, 1);
 }
 
-void WaveFile::writeData(std::ofstream &outputfile, std::ifstream &inputstream) {
+void WaveFile::writeData(std::ofstream &outputfile, std::ifstream &inputstream, u_int32_t waveSecSize) {
     std::cout << "\nwritingDATA\n";
     u_int32_t waveSizeBytes;
     inputstream.read((char*)&waveSizeBytes, sizeof(waveSizeBytes));
-    std::cout << "\nwaveSize: " << waveSizeBytes << "\n";
-    for (typeof waveSizeBytes i = 0; i < waveSizeBytes; ++i ){
-        inputstream.read(&waveStreamBuffer, sizeof(waveStreamBuffer));
-        outputfile << waveStreamBuffer;
+    if (waveSizeBytes < waveSecSize) {
+        std::cout << "\nwaveSize: " << waveSizeBytes << "\n";
+        for (typeof waveSizeBytes i = 0; i < waveSizeBytes; ++i ){
+            inputstream.read(&waveStreamBuffer, sizeof(waveStreamBuffer));
+            outputfile << waveStreamBuffer;
+        }
     }
 }

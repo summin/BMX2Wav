@@ -22,7 +22,7 @@ using namespace std;
 /**
  writes data to waveFile
  */
-static void extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t numberOfTs) {
+static int extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t numberOfTs, u_int32_t waveSecSize) {
     cout << "\nentered the wav extraction " << numberOfTs <<  "\n";
     for (int m = 0; m < numberOfTs; ++m) {
         ofstream outputfile;
@@ -42,11 +42,15 @@ static void extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t n
             }
         }
         
+        cout << "\n CURRENT POS " << bmxFile.tellg() <<  "\n";
+        
         waveFile.writeHeader(outputfile);
-        waveFile.writeData(outputfile, bmxFile);
+        waveFile.writeData(outputfile, bmxFile, waveSecSize);
         waveFile.writeSizesToHeader(outputfile);
         outputfile.close();
+        
     }
+    return 0;
 }
 
 /**
@@ -134,7 +138,8 @@ static int processFile(const std::string &bmxFileName) {
     /**
      Process Waves
      */
-    extractWaves(bmxFile, waveTList, numberOfWavTs);
+    int extractResult;
+    extractResult = extractWaves(bmxFile, waveTList, numberOfWavTs, waveSectionOffsetAndSize[1]);
 
     bmxFile.close();
     cout << "EXTRACTION COMPLETED \n\n";
@@ -152,7 +157,7 @@ int main(int argc, const char * argv[]) {
     std::string path = "./";
     for (const auto & entry : fs::directory_iterator(path)) {
         string bmxFileName = entry.path();
-        if (bmxFileName.substr(bmxFileName.length()-4, 4) == ".bmx") {
+        if ((bmxFileName.substr(bmxFileName.length()-4, 4) == ".bmx") || (bmxFileName.substr(bmxFileName.length()-4, 4) == ".BMX")) {
             cout << "\n\n\nProcessing file: " << bmxFileName << endl;
             processFile(bmxFileName);
         }

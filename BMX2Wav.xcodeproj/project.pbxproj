@@ -10,7 +10,6 @@
 		F704ABFC2512A8AB00F858D8 /* WaveFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F704ABFA2512A8AB00F858D8 /* WaveFile.cpp */; };
 		F791B98624FB06310065BF49 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F791B98524FB06310065BF49 /* main.cpp */; };
 		F7BE3F2A2517CFCC0030498B /* WaveTObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7BE3F282517CFCC0030498B /* WaveTObject.cpp */; };
-		F7BE3F2D2517E13C0030498B /* WaveObject.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7BE3F2B2517E13C0030498B /* WaveObject.cpp */; };
 		F7BE3F302517E3B30030498B /* SectionUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F7BE3F2E2517E3B30030498B /* SectionUtility.cpp */; };
 /* End PBXBuildFile section */
 
@@ -33,8 +32,6 @@
 		F791B98524FB06310065BF49 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		F7BE3F282517CFCC0030498B /* WaveTObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WaveTObject.cpp; sourceTree = "<group>"; };
 		F7BE3F292517CFCC0030498B /* WaveTObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WaveTObject.hpp; sourceTree = "<group>"; };
-		F7BE3F2B2517E13C0030498B /* WaveObject.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = WaveObject.cpp; sourceTree = "<group>"; };
-		F7BE3F2C2517E13C0030498B /* WaveObject.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = WaveObject.hpp; sourceTree = "<group>"; };
 		F7BE3F2E2517E3B30030498B /* SectionUtility.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = SectionUtility.cpp; sourceTree = "<group>"; };
 		F7BE3F2F2517E3B30030498B /* SectionUtility.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = SectionUtility.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -74,8 +71,6 @@
 				F704ABFB2512A8AB00F858D8 /* WaveFile.hpp */,
 				F7BE3F282517CFCC0030498B /* WaveTObject.cpp */,
 				F7BE3F292517CFCC0030498B /* WaveTObject.hpp */,
-				F7BE3F2B2517E13C0030498B /* WaveObject.cpp */,
-				F7BE3F2C2517E13C0030498B /* WaveObject.hpp */,
 				F7BE3F2E2517E3B30030498B /* SectionUtility.cpp */,
 				F7BE3F2F2517E3B30030498B /* SectionUtility.hpp */,
 			);
@@ -139,7 +134,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F7BE3F2D2517E13C0030498B /* WaveObject.cpp in Sources */,
 				F7BE3F2A2517CFCC0030498B /* WaveTObject.cpp in Sources */,
 				F704ABFC2512A8AB00F858D8 /* WaveFile.cpp in Sources */,
 				F791B98624FB06310065BF49 /* main.cpp in Sources */,

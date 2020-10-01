@@ -37,7 +37,7 @@ public:
     
     void setWaveIndex(std::ifstream &inputstream);
     void setWaveFormat(std::ifstream &inputstream);
-    void writeData(std::ofstream &outputfile, std::ifstream &inputstream);
+    void writeData(std::ofstream &outputfile, std::ifstream &inputstream, u_int32_t waveSecSize);
     void writeHeader(std::ofstream &outputfile);
     void writeSizesToHeader(std::ofstream &outputfile);
     

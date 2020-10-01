@@ -25,6 +25,9 @@ public:
     u_int8_t flags;
     bool stereo;
     bool envelopes;
+    bool floatingPointMem;
+    bool loop;
+    bool dontSave;
     
     void setFieldsDynamic(std::ifstream &inputstream, int index);
     void extractFolderName();
