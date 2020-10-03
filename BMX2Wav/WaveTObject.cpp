@@ -43,7 +43,7 @@ void WaveTObject::setFieldsDynamic(std::ifstream &inputstream, int maxIndex) {
             
             buffer = ' ';
             while (buffer != '\0') {
-                inputstream.read(&buffer, 1);
+                inputstream.read(&buffer, 1); 
                 this->name.push_back(buffer);
             }
             
