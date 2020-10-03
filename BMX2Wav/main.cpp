@@ -33,12 +33,13 @@ static int extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t nu
         waveFile.setWaveFormat(bmxFile);
         
         cout << "\n_" << waveFile.waveIndex << "_ index \n";
-        cout << "\n_" << waveFile.waveFormat << "_ format \n";
+        cout << "\n_" << (int)waveFile.waveFormat << "_ format \n";
+        
         
         for (uint16_t n = 0; n < numberOfTs; ++n) {
             if (wavTs[n].index == waveFile.waveIndex) {
-                __fs::filesystem::create_directories(wavTs[n].folderName);
-                outputfile.open(wavTs[n].fileName);
+                __fs::filesystem::create_directories("extractedSmp/" + wavTs[n].folderName);
+                outputfile.open("extractedSmp/" + wavTs[n].fileName);
             }
         }
         

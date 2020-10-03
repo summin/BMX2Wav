@@ -15,8 +15,8 @@
 class WaveFile {
 public:
     
-    uint32_t waveSizeBytes;
-    uint16_t waveIndex;
+    u_int32_t waveSizeBytes;
+    u_int16_t waveIndex;
     char waveFormat;
     
     char waveStreamBuffer;
