@@ -30,6 +30,7 @@ public:
     bool dontSave;
     
     void setFieldsDynamic(std::ifstream &inputstream, int index);
+    void setFields(std::ifstream &inputstream, int index);
     void extractFolderName();
     void extractStereo();
     void extractEnvelopes();

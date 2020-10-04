@@ -58,6 +58,10 @@ void WaveTObject::setFieldsDynamic(std::ifstream &inputstream, int maxIndex) {
 
 }
 
+void extractFields(std::ifstream &inputstream, int maxIndex) {
+    
+}
+
 void WaveTObject::extractFolderName() {
     size_t found = this->fileName.find_last_of("/");
     this->folderName = this->fileName.substr(0,found);
