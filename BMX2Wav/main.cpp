@@ -64,6 +64,7 @@ static int processFile(const std::string &bmxFileName)
     uint32_t numberOfSections;
     uint16_t numberOfWaves;
     uint16_t numberOfWavTs;
+    string bver = "";
     ifstream bmxFile;
     string buzzStr;
 
@@ -93,18 +94,34 @@ static int processFile(const std::string &bmxFileName)
      */
     array<uint32_t, 2> waveSectionOffsetAndSize;
     array<uint32_t, 2> wavTSectionOffsetAndSize;
+    array<uint32_t, 2> bverSectionOffsetAndSize;
     SectionUtility sectionUtility;
     wavTSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(wavTSecName, bmxFile);
     waveSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(waveSecName1, bmxFile);
+    bverSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(bverSecName, bmxFile);
     if (!sectionUtility.isSectionFound)
     {
         waveSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(waveSecName2, bmxFile);
     }
+    
     cout << sectionUtility.seekSectionStringValue(bverSecName, bmxFile) << "\n";
     cout << "WaveSecOffet: " << waveSectionOffsetAndSize[0] << "\n";
     cout << "WaveSecSize: " << waveSectionOffsetAndSize[1] << "\n";
     cout << "WavTSecOffet: " << wavTSectionOffsetAndSize[0] << "\n";
     cout << "WavTSecSize: " << wavTSectionOffsetAndSize[1] << "\n";
+
+    /**
+     Get version
+     */
+    bmxFile.clear();
+    bmxFile.seekg(0);
+    bmxFile.seekg(bverSectionOffsetAndSize[0], ios::beg);
+    *bufferPtr = '-';
+    while (buffer != '\0') {
+        bmxFile.read(bufferPtr, 1);
+        bver.push_back(buffer);
+    }
+    cout << "Buzz Version: " << bver << "\n";
 
     /**
      Get number of WavTs
@@ -120,10 +137,12 @@ static int processFile(const std::string &bmxFileName)
     for (int i = 0; i < numberOfWavTs; ++i)
     {
         WaveTObject waveTObject;
-        waveTObject.setFieldsDynamic(bmxFile, i);
+        waveTObject.setFields(bmxFile, i);
         waveTObject.extractFolderName();
-        waveTObject.extractStereo();
-        waveTObject.extractEnvelopes();
+        waveTObject.parseFlags();
+        if (waveTObject.envelopes) {
+            waveTObject.processEnvelopes(bmxFile);
+        }
         waveTObject.printFieldsValues();
         waveTList[i] = waveTObject;
     }
@@ -146,8 +165,8 @@ static int processFile(const std::string &bmxFileName)
     /**
      Process Waves
      */
-    int extractResult;
-    extractResult = extractWaves(bmxFile, waveTList, numberOfWavTs, waveSectionOffsetAndSize[1]);
+    // int extractResult;
+    // extractResult = extractWaves(bmxFile, waveTList, numberOfWavTs, waveSectionOffsetAndSize[1]);
 
     bmxFile.close();
     cout << "EXTRACTION COMPLETED \n\n";
@@ -169,7 +188,7 @@ int main(int argc, const char *argv[])
         string bmxFileName = entry.path();
         if ((bmxFileName.substr(bmxFileName.length() - 4, 4) == ".bmx") || (bmxFileName.substr(bmxFileName.length() - 4, 4) == ".BMX"))
         {
-            cout << "\n\n\nProcessing file: " << bmxFileName << endl;
+            cout << "\nProcessing file: " << bmxFileName << endl;
             processFile(bmxFileName);
         }
     }

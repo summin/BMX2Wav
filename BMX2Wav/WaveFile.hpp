@@ -23,8 +23,6 @@ public:
     std::string name;
     std::string path;
     
-    
-    
     int32_t header_waveDataSizeA = 0;
     int32_t header_some16 = 16;
     int16_t header_pcm = 1;

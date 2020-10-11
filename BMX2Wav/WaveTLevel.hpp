@@ -11,4 +11,14 @@
 
 #include <stdio.h>
 
+
+class WaveTLevel {
+public:
+    u_int32_t numberOfSamples;
+    u_int32_t loopBegin;
+    u_int32_t loopEnd;
+    u_int32_t sampleRate;
+    char rootNote;
+};
+
 #endif /* WaveTLevel_hpp */
