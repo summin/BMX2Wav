@@ -32,10 +32,10 @@ static int extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t nu
         // // ofstream outputfile1;
         WaveFile waveFile;
         waveFile.setWaveIndex(bmxFile);
-        waveFile.setWaveFormat(bmxFile);
-
         cout << "\n_" << waveFile.waveIndex << "_ index \n";
-        cout << "\n_" << (int)waveFile.waveFormat << "_ format \n";
+        // waveFile.setWaveFormat(bmxFile);
+        // cout << "\n_" << (int)waveFile.waveFormat << "_ format\n";
+        
 
         for (uint16_t n = 0; n < numberOfTs; ++n)
         {
@@ -98,11 +98,11 @@ static int processFile(const std::string &bmxFileName)
     SectionUtility sectionUtility;
     wavTSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(wavTSecName, bmxFile);
     waveSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(waveSecName1, bmxFile);
-    bverSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(bverSecName, bmxFile);
     if (!sectionUtility.isSectionFound)
     {
         waveSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(waveSecName2, bmxFile);
     }
+    bverSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(bverSecName, bmxFile);
     
     cout << sectionUtility.seekSectionStringValue(bverSecName, bmxFile) << "\n";
     cout << "WaveSecOffet: " << waveSectionOffsetAndSize[0] << "\n";
@@ -143,6 +143,7 @@ static int processFile(const std::string &bmxFileName)
         if (waveTObject.envelopes) {
             waveTObject.processEnvelopes(bmxFile);
         }
+        waveTObject.processLevels(bmxFile);
         waveTObject.printFieldsValues();
         waveTList[i] = waveTObject;
     }
@@ -165,8 +166,8 @@ static int processFile(const std::string &bmxFileName)
     /**
      Process Waves
      */
-    // int extractResult;
-    // extractResult = extractWaves(bmxFile, waveTList, numberOfWavTs, waveSectionOffsetAndSize[1]);
+    int extractResult;
+    extractResult = extractWaves(bmxFile, waveTList, numberOfWavTs, waveSectionOffsetAndSize[1]);
 
     bmxFile.close();
     cout << "EXTRACTION COMPLETED \n\n";

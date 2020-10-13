@@ -39,6 +39,8 @@ public:
     
     void setFieldsDynamic(std::ifstream &inputstream, int index);
     void setFields(std::ifstream &inputstream, int index);
+    void processLevels(std::ifstream &inputstream);
+    
     void processEnvelopes(std::ifstream &inputstream);
     
     void parseFlags();
