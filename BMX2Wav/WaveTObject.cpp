@@ -60,6 +60,7 @@ void WaveTObject::processLevels(std::ifstream &inputstream) {
         inputstream.read((char*)&waveTLevel.sampleRate, sizeof(waveTLevel.sampleRate));
         inputstream.read((char*)&waveTLevel.rootNote, sizeof(waveTLevel.rootNote));
         
+        waveTLevelList.push_back(waveTLevel);
         cout << "Level numberOfSamples: " << waveTLevel.numberOfSamples << "\n";
         //cout << "Level loopBegin: " << waveTLevel.loopBegin << "\n";
         //cout << "Level loopEnd: " << waveTLevel.loopEnd << "\n";

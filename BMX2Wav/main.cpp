@@ -22,30 +22,41 @@ using namespace std;
 /**
  writes data to waveFile
  */
-static int extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t numberOfTs, u_int32_t waveSecSize)
+static int extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t numberOfTs)
 {
     cout << "\nentered the wav extraction " << numberOfTs << "\n";
+    
     for (int m = 0; m < numberOfTs; ++m)
     {
         ofstream outputfile;
         // outputfile.open("./1.wav");
         // // ofstream outputfile1;
         WaveFile waveFile;
+        
         waveFile.setWaveIndex(bmxFile);
         cout << "\n_" << waveFile.waveIndex << "_ index \n";
-        // waveFile.setWaveFormat(bmxFile);
-        // cout << "\n_" << (int)waveFile.waveFormat << "_ format\n";
         
-
-        for (uint16_t n = 0; n < numberOfTs; ++n)
-        {
-            if (wavTs[n].index == waveFile.waveIndex)
-            {
-                __fs::filesystem::create_directories("extractedSmp/" + wavTs[n].folderName);
-                outputfile.open("extractedSmp/" + wavTs[n].fileName);
-            }
+        waveFile.setWaveFormat(bmxFile);
+        cout << "\n_" << (int)waveFile.waveFormat << "_ format\n";
+        
+        u_int32_t waveSecSize;
+        
+        __fs::filesystem::create_directories("extractedSmp/" + wavTs[m].folderName);
+        outputfile.open("extractedSmp/" + wavTs[m].fileName);
+        
+        waveSecSize = 0;
+        for (
+             int nLevels = 0;
+             nLevels < (sizeof(wavTs[m].waveTLevelList)/sizeof(wavTs[m].waveTLevelList[0]));
+             ++nLevels
+             ) {
+            waveSecSize += wavTs[m].waveTLevelList[nLevels].numberOfSamples;
         }
-
+        
+        waveSecSize = waveSecSize*2;
+        
+        cout << "\n RRRRRRRR" <<  waveSecSize << "\n";
+        
         cout << "\n CURRENT POS " << bmxFile.tellg() << "\n";
 
         waveFile.writeHeader(outputfile);
@@ -167,7 +178,7 @@ static int processFile(const std::string &bmxFileName)
      Process Waves
      */
     int extractResult;
-    extractResult = extractWaves(bmxFile, waveTList, numberOfWavTs, waveSectionOffsetAndSize[1]);
+    extractResult = extractWaves(bmxFile, waveTList, numberOfWavTs);
 
     bmxFile.close();
     cout << "EXTRACTION COMPLETED \n\n";
