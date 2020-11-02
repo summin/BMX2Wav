@@ -22,9 +22,9 @@ using namespace std;
 /**
  writes data to waveFile
  */
-static int extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t numberOfTs)
+static int extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t numberOfTs, long fileSize)
 {
-    cout << "\nentered the wav extraction " << numberOfTs << "\n";
+    // cout << "\nentered the wav extraction " << numberOfTs << "\n";
     
     for (int m = 0; m < numberOfTs; ++m)
     {
@@ -34,10 +34,10 @@ static int extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t nu
         WaveFile waveFile;
         
         waveFile.setWaveIndex(bmxFile);
-        cout << "\n_" << waveFile.waveIndex << "_ index \n";
+        // cout << "\n_" << waveFile.waveIndex << "_ index \n";
         
         waveFile.setWaveFormat(bmxFile);
-        cout << "\n_" << (int)waveFile.waveFormat << "_ format\n";
+        // cout << "\n_" << (int)waveFile.waveFormat << "_ format\n";
         
         u_int32_t waveSecSize;
         
@@ -55,22 +55,25 @@ static int extractWaves(std::ifstream &bmxFile, WaveTObject wavTs[], uint16_t nu
         
         waveSecSize = waveSecSize*2;
         
-        cout << "\n RRRRRRRR" <<  waveSecSize << "\n";
-        
-        cout << "\n CURRENT POS " << bmxFile.tellg() << "\n";
+        // cout << "\n Wave SecSize" <<  waveSecSize << "\n";
+        // cout << "\n CURRENT POS " << bmxFile.tellg() << "\n";
 
-        waveFile.writeHeader(outputfile);
-        waveFile.writeData(outputfile, bmxFile, waveSecSize);
-        waveFile.writeSizesToHeader(outputfile);
+        waveFile.writeHeader(outputfile, wavTs[m].floatingPointMem, wavTs[m].stereo);
+        int writeDataResult = waveFile.writeData(outputfile, bmxFile, waveSecSize, wavTs[m].floatingPointMem, wavTs[m].stereo, fileSize);
+        if (writeDataResult == 1) {
+            return 1;
+        }
+        waveFile.writeSizesToHeader(outputfile, wavTs[m].floatingPointMem, wavTs[m].stereo);
         outputfile.close();
     }
+    
     return 0;
 }
 
 /**
  process a BMX file
  */
-static int processFile(const std::string &bmxFileName)
+static int processFile(const std::string &bmxFileName, ofstream &loggerFile)
 {
     uint32_t numberOfSections;
     uint16_t numberOfWaves;
@@ -79,6 +82,9 @@ static int processFile(const std::string &bmxFileName)
     ifstream bmxFile;
     string buzzStr;
 
+    long fileSize = fs::file_size(bmxFileName);
+
+    
     array<char, 4> wavTSecName{'W', 'A', 'V', 'T'};
     array<char, 4> waveSecName1{'W', 'A', 'V', 'E'};
     array<char, 4> waveSecName2{'C', 'W', 'A', 'V'};
@@ -88,6 +94,7 @@ static int processFile(const std::string &bmxFileName)
     char *bufferPtr;
     bufferPtr = &buffer;
     bmxFile.open(bmxFileName, ios::binary);
+    
 
     /**
      get number of sections
@@ -98,7 +105,7 @@ static int processFile(const std::string &bmxFileName)
         buzzStr += buffer;
     }
     bmxFile.read(reinterpret_cast<char *>(&numberOfSections), sizeof(numberOfSections));
-    cout << "Number Of Sections: " << numberOfSections << "\n";
+    // cout << "Number Of Sections: " << numberOfSections << "\n";
 
     /**
      get WAVE and WAVT section offset and size
@@ -115,11 +122,11 @@ static int processFile(const std::string &bmxFileName)
     }
     bverSectionOffsetAndSize = sectionUtility.seekSectionOffsetAndSize(bverSecName, bmxFile);
     
-    cout << sectionUtility.seekSectionStringValue(bverSecName, bmxFile) << "\n";
-    cout << "WaveSecOffet: " << waveSectionOffsetAndSize[0] << "\n";
-    cout << "WaveSecSize: " << waveSectionOffsetAndSize[1] << "\n";
-    cout << "WavTSecOffet: " << wavTSectionOffsetAndSize[0] << "\n";
-    cout << "WavTSecSize: " << wavTSectionOffsetAndSize[1] << "\n";
+    // cout << sectionUtility.seekSectionStringValue(bverSecName, bmxFile) << "\n";
+    // cout << "WaveSecOffet: " << waveSectionOffsetAndSize[0] << "\n";
+    // cout << "WaveSecSize: " << waveSectionOffsetAndSize[1] << "\n";
+    // cout << "WavTSecOffet: " << wavTSectionOffsetAndSize[0] << "\n";
+    // cout << "WavTSecSize: " << wavTSectionOffsetAndSize[1] << "\n";
 
     /**
      Get version
@@ -132,7 +139,7 @@ static int processFile(const std::string &bmxFileName)
         bmxFile.read(bufferPtr, 1);
         bver.push_back(buffer);
     }
-    cout << "Buzz Version: " << bver << "\n";
+    // cout << "Buzz Version: " << bver << "\n";
 
     /**
      Get number of WavTs
@@ -141,7 +148,7 @@ static int processFile(const std::string &bmxFileName)
     bmxFile.seekg(0);
     bmxFile.seekg(wavTSectionOffsetAndSize[0], ios::beg);
     bmxFile.read((char *)&numberOfWavTs, sizeof(numberOfWavTs));
-    cout << "Number of WavTs in BMX: " << numberOfWavTs << "\n";
+    // cout << "Number of WavTs in BMX: " << numberOfWavTs << "\n";
 
     WaveTObject waveTList[numberOfWavTs];
 
@@ -166,11 +173,11 @@ static int processFile(const std::string &bmxFileName)
     bmxFile.seekg(0);
     bmxFile.seekg(waveSectionOffsetAndSize[0], ios::beg);
     bmxFile.read((char *)&numberOfWaves, sizeof(numberOfWaves));
-    cout << "Number of Waves in BMX: " << numberOfWaves << "\n";
+    // cout << "Number of Waves in BMX: " << numberOfWaves << "\n";
 
     if (numberOfWaves != numberOfWavTs)
     {
-        cout << "Unsupported file";
+        loggerFile << "01 " << bver << " Unsupported file: " << bmxFileName << endl;
         return 1;
     }
 
@@ -178,10 +185,18 @@ static int processFile(const std::string &bmxFileName)
      Process Waves
      */
     int extractResult;
-    extractResult = extractWaves(bmxFile, waveTList, numberOfWavTs);
+    extractResult = extractWaves(bmxFile, waveTList, numberOfWavTs, fileSize);
 
+    
+    if (extractResult == 1)
+    {
+        loggerFile << "02 " << bver << " Unsupported file: " << bmxFileName << endl;
+        return 1;
+    }
+    
+    loggerFile << "Extracted successfully from: " << bmxFileName << endl;
+    
     bmxFile.close();
-    cout << "EXTRACTION COMPLETED \n\n";
 
     return 0;
 }
@@ -191,44 +206,30 @@ static int processFile(const std::string &bmxFileName)
  */
 int main(int argc, const char *argv[])
 {
+    ofstream loggerFile;
+    loggerFile.open("bmxExtract.log");
     /**
      iterate through files in directory
      */
     std::string path = "./";
+    int irl = 0;
     for (const auto &entry : fs::directory_iterator(path))
     {
+        ++irl;
         string bmxFileName = entry.path();
-        if ((bmxFileName.substr(bmxFileName.length() - 4, 4) == ".bmx") || (bmxFileName.substr(bmxFileName.length() - 4, 4) == ".BMX"))
-        {
-            cout << "\nProcessing file: " << bmxFileName << endl;
-            processFile(bmxFileName);
+        if (entry.is_regular_file()) {
+            // cout << "\nPreProcessing file: " << bmxFileName << ' ' << entry.is_regular_file() << endl;
+            if ((bmxFileName.substr(bmxFileName.length() - 4, 4) == ".bmx") || (bmxFileName.substr(bmxFileName.length() - 4, 4) == ".BMX"))
+            {
+                cout << "\nProcessing file: " << bmxFileName << endl;
+                processFile(bmxFileName, loggerFile);
+            }
+            if (irl > 4) {
+                
+            }
+            // cout << "\nPostProcessing file DONE: " << endl;
         }
     }
-}
-
-/**
- code holder. inactive
- */
-void someStuffUnused()
-{
-
-    // std::string str = "/api/asd/";
-    // std::string pattern = "/api/(.*)/";
-    // std::cout << "Starting matching" << std::endl;
-    // std::smatch matches;
-    // if (std::regex_match(str, matches, std::regex(pattern, std::regex::egrep)))
-    // {
-    //     std::cout << "Found match!" << std::endl;
-    //     std::cout << "All matches: ";
-    //     for (auto& it : matches)
-    //         std::cout << it << ", ";
-    //     std::cout << std::endl;
-    // }
-
-    cout << "Writing Sample Data\n";
-
-    regex r;
-
-    // data vars
-    __fs::filesystem::create_directories("./samples1/asd/ds");
+    loggerFile.close();
+    return 0;
 }

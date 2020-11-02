@@ -51,7 +51,7 @@ void WaveTObject::parseFlags() {
 
 void WaveTObject::processLevels(std::ifstream &inputstream) {
     inputstream.read((char*)&this->numberOfLevels, sizeof(this->numberOfLevels));
-    cout << "NUMBER OF LEVELS: " << (int)this->numberOfLevels << "\n";
+    // cout << "NUMBER OF LEVELS: " << (int)this->numberOfLevels << "\n";
     for (int iNLev = 0; iNLev < this->numberOfLevels; ++iNLev) {
         WaveTLevel waveTLevel;
         inputstream.read((char*)&waveTLevel.numberOfSamples, sizeof(waveTLevel.numberOfSamples));
@@ -61,11 +61,11 @@ void WaveTObject::processLevels(std::ifstream &inputstream) {
         inputstream.read((char*)&waveTLevel.rootNote, sizeof(waveTLevel.rootNote));
         
         waveTLevelList.push_back(waveTLevel);
-        cout << "Level numberOfSamples: " << waveTLevel.numberOfSamples << "\n";
+        // cout << "Level numberOfSamples: " << waveTLevel.numberOfSamples << "\n";
         //cout << "Level loopBegin: " << waveTLevel.loopBegin << "\n";
         //cout << "Level loopEnd: " << waveTLevel.loopEnd << "\n";
-        cout << "Level sampleRate: " << waveTLevel.sampleRate << "\n";
-        cout << "Level rootNote: " << waveTLevel.rootNote << "\n";
+        // cout << "Level sampleRate: " << waveTLevel.sampleRate << "\n";
+        // cout << "Level rootNote: " << waveTLevel.rootNote << "\n";
         
     }
 }
@@ -120,8 +120,8 @@ void WaveTObject::processEnvelopes(std::ifstream &inputstream){
 }
 
 void WaveTObject::printFieldsValues(){
-    cout << "index: " << this->index << "\n";
-    cout << "filename: " << this->fileName << "\n";
+    // cout << "index: " << this->index << "\n";
+    // cout << "filename: " << this->fileName << "\n";
     // cout << "name: " << this->name << "\n";
     // cout << "volume: " << this->volume << "\n";
     // cout << "stereo: " << this->stereo << "\n";
@@ -130,14 +130,14 @@ void WaveTObject::printFieldsValues(){
     // cout << "flagFloatingPointMem: " << this->floatingPointMem << "\n";
     // cout << "flagLoop: " << this->loop << "\n";
     // cout << "flagDontSave: " << this->dontSave << "\n";
-    cout << "\n";
+    // cout << "\n";
 }
 
 void WaveTObject::extractFolderName() {
     size_t found = this->fileName.find_last_of("/");
     this->folderName = this->fileName.substr(0,found);
     this->folderFileName = this->fileName.substr(found+1);
-    cout << "_" << this->folderFileName << " " << this->folderName << "_\n";
+    // cout << "_" << this->folderFileName << " " << this->folderName << "_\n";
     
 }
 
