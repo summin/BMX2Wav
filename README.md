@@ -14,3 +14,10 @@ We recommend to use xcode for compilation. Otherwise the code should compile wit
 
 ## Licence MIT
 The program is distributed unders MIT licence without any warranty or responsibility in regards to safety of your hardware, software and/or data. 
+
+## Possible Errors
+the below error may appear, if the folder with bmx files contains files with other extensions, including hidden and system files. Please, cleanup before execution.
+#####
+Processing file: ./23424.BMX
+libc++abi.dylib: terminating with uncaught exception of type std::__1::__fs::filesystem::filesystem_error: filesystem error: in create_directory: Illegal byte sequence [extractedSmp/Drive Box/SMP/wave/neue/absolute/???]
+Abort trap: 6
