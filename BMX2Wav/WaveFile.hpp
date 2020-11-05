@@ -23,8 +23,6 @@ public:
     std::string name;
     std::string path;
     
-    
-    
     int32_t header_waveDataSizeA = 0;
     int32_t header_some16 = 16;
     int16_t header_pcm = 1;
@@ -37,9 +35,9 @@ public:
     
     void setWaveIndex(std::ifstream &inputstream);
     void setWaveFormat(std::ifstream &inputstream);
-    void writeData(std::ofstream &outputfile, std::ifstream &inputstream, u_int32_t waveSecSize);
-    void writeHeader(std::ofstream &outputfile);
-    void writeSizesToHeader(std::ofstream &outputfile);
+    int writeData(std::ofstream &outputfile, std::ifstream &inputstream, u_int32_t waveSecSize, bool floatMem, bool stereo, long fileSize);
+    void writeHeader(std::ofstream &outputfile, bool floatMem, bool stereo);
+    void writeSizesToHeader(std::ofstream &outputfile, bool floatMem, bool stereo);
     
 };
 

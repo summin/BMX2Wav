@@ -11,7 +11,10 @@
 
 #include <stdio.h>
 #include <string>
+#include <vector>
+
 #include <cstddef>
+#include "WaveTLevel.hpp"
 
 class WaveTObject {
 public:
@@ -20,19 +23,28 @@ public:
     std::string folderName;
     std::string folderFileName;
     
+    
     std::string name;
     float volume;
-    u_int8_t flags;
+    char flags;
+    
     bool stereo;
     bool envelopes;
     bool floatingPointMem;
     bool loop;
     bool dontSave;
     
+    u_int8_t numberOfLevels;
+    std::vector<WaveTLevel> waveTLevelList;
+    
     void setFieldsDynamic(std::ifstream &inputstream, int index);
+    void setFields(std::ifstream &inputstream, int index);
+    void processLevels(std::ifstream &inputstream);
+    
+    void processEnvelopes(std::ifstream &inputstream);
+    
+    void parseFlags();
     void extractFolderName();
-    void extractStereo();
-    void extractEnvelopes();
     void printFieldsValues();
 };
 

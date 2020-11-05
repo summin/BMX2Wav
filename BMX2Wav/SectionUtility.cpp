@@ -13,7 +13,8 @@
 
 using namespace std;
 
-array<uint32_t, 2> SectionUtility::seekSectionOffsetAndSize(array<char, 4> sectionGauge, ifstream &inputstream) {
+array<uint32_t, 2> SectionUtility::
+seekSectionOffsetAndSize(array<char, 4> sectionGauge, ifstream &inputstream) {
     
     array<uint32_t, 2> sectionOffsetAndSize;
     inputstream.clear();
@@ -56,7 +57,7 @@ string SectionUtility::seekSectionStringValue(array<char, 4> sectionGauge, ifstr
     inputstream.clear();
     inputstream.seekg(0);
     string bver;
-    char buf;
+
     char buffer;
     char* bufferPtr;
     bufferPtr = &buffer;
@@ -82,9 +83,11 @@ string SectionUtility::seekSectionStringValue(array<char, 4> sectionGauge, ifstr
         }
     }
     
+    char buf;
+    char* bufPtr;
+    bufPtr = &buf;
     while (buf != '\0') {
-        cout << buf;
-        inputstream.read(&buf, 1);
+        inputstream.read(bufPtr, 1);
         bver.push_back(buf);
     }
     
