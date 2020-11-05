@@ -10,7 +10,7 @@ Copy BMX2Wav to your bmx files folder and run it. It will find all the files in 
 We strongly recommend to copy all your bmx files into one folder and execute BMX2Wav there. Please, make sure that you have the backup copies of your bmx files.
 
 ## Compilation
-The program is compiled for OSX Catalina, however, it can be recompiled to any other unix-based OS. Source is in repo.
+We recommend to use xcode for compilation. Otherwise the code should compile without many problems for any other unix based os. Contact alexander.leontjev@gmail.com for binary.
 
 ## Licence MIT
 The program is distributed unders MIT licence without any warranty or responsibility in regards to safety of your hardware, software and/or data. 
