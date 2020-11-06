@@ -15,10 +15,8 @@ void WaveFile::writeHeader(std::ofstream &outputfile, bool floatMem, bool stereo
     if (stereo) {
         header_channels = 2;
     }
-    if (floatMem) {
-        header_Bits = 24;
-    }
-        // 1-4
+
+    // 1-4
     outputfile << "RIFF";
     // 5-8
     outputfile.write(reinterpret_cast<const char *>(&this->header_waveDataSizeA), sizeof(header_waveDataSizeA));

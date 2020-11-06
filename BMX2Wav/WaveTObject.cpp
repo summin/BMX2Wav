@@ -35,6 +35,8 @@ void WaveTObject::setFields(std::ifstream &inputstream, int maxIndex) {
     
     this->fileName = this->fileName.substr(3);
     this->fileName = regex_replace(this->fileName, regex("\\\\"), "/");
+    this->fileName = regex_replace(this->fileName, regex(R"([^\x00-\x7F])"), "a");
+    
     
     inputstream.read((char*)&this->volume, sizeof(this->volume));
     inputstream.read((char*)&this->flags, sizeof(this->flags));
@@ -62,8 +64,8 @@ void WaveTObject::processLevels(std::ifstream &inputstream) {
         
         waveTLevelList.push_back(waveTLevel);
         // cout << "Level numberOfSamples: " << waveTLevel.numberOfSamples << "\n";
-        //cout << "Level loopBegin: " << waveTLevel.loopBegin << "\n";
-        //cout << "Level loopEnd: " << waveTLevel.loopEnd << "\n";
+        // cout << "Level loopBegin: " << waveTLevel.loopBegin << "\n";
+        // cout << "Level loopEnd: " << waveTLevel.loopEnd << "\n";
         // cout << "Level sampleRate: " << waveTLevel.sampleRate << "\n";
         // cout << "Level rootNote: " << waveTLevel.rootNote << "\n";
         
@@ -139,49 +141,4 @@ void WaveTObject::extractFolderName() {
     this->folderFileName = this->fileName.substr(found+1);
     // cout << "_" << this->folderFileName << " " << this->folderName << "_\n";
     
-}
-
-void WaveTObject::setFieldsDynamic(std::ifstream &inputstream, int maxIndex) {
-
-    long streamPos = inputstream.tellg();
-    
-    char diskName;
-    char colon;
-    char backslash;
-    
-    while (true) {
-        inputstream.seekg(streamPos);
-        inputstream.read((char*)&this->index, sizeof(this->index));
-        inputstream.read(&diskName, 1);
-        inputstream.read(&colon, 1);
-        inputstream.read(&backslash, 1);
-        
-        if (this->index < 500
-            && diskName >= 'C'
-            && diskName < 'L'
-            && colon == ':'
-            && backslash == '\\'
-            )
-        {
-            char buffer = ' ';
-            while (buffer != '\0') {
-                inputstream.read(&buffer, 1);
-                this->fileName.push_back(buffer);
-            }
-            
-            buffer = ' ';
-            while (buffer != '\0') {
-                inputstream.read(&buffer, 1);
-                this->name.push_back(buffer);
-            }
-            
-            inputstream.read((char*)&this->volume, sizeof(this->volume));
-            inputstream.read((char*)&this->flags, sizeof(this->flags));
-            break;
-        } else {
-            ++streamPos;
-        }
-    }
-    this->fileName = regex_replace(this->fileName, regex("\\\\"), "/");
-
 }

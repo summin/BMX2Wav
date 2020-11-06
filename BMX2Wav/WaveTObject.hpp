@@ -37,7 +37,6 @@ public:
     u_int8_t numberOfLevels;
     std::vector<WaveTLevel> waveTLevelList;
     
-    void setFieldsDynamic(std::ifstream &inputstream, int index);
     void setFields(std::ifstream &inputstream, int index);
     void processLevels(std::ifstream &inputstream);
     
